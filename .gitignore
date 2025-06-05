@@ -1,0 +1,6 @@
+*
+!puppy/
+!puppy/**
+!.gitignore
+!README.md
+!LICENSE
