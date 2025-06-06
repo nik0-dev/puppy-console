@@ -130,11 +130,11 @@ func set_font(new_font: Font):
 func set_font_size(new_font_size: int):
 	title.add_theme_font_size_override("font_size", new_font_size)
 	title.add_theme_font_size_override("font_size", new_font_size)
-	output.add_theme_font_size_override("normal_font", new_font_size)
-	output.add_theme_font_size_override("bold_font", new_font_size)
-	output.add_theme_font_size_override("mono_font", new_font_size)
-	output.add_theme_font_size_override("italics_font", new_font_size)
-	output.add_theme_font_size_override("bold_italics_font", new_font_size)
+	output.add_theme_font_size_override("normal_font_size", new_font_size)
+	output.add_theme_font_size_override("bold_font_size", new_font_size)
+	output.add_theme_font_size_override("mono_font_size", new_font_size)
+	output.add_theme_font_size_override("italics_font_size", new_font_size)
+	output.add_theme_font_size_override("bold_italics_font_size", new_font_size)
 	status.add_theme_font_size_override("font_size", new_font_size)
 	input.add_theme_font_size_override("font_size", new_font_size)
 
@@ -155,3 +155,7 @@ func write_line(text: String): output.text += text + "\n"
 func set_container_margins(dictionary: Dictionary):
 	for key in dictionary.keys():
 		margins.add_theme_constant_override(key, dictionary[key])
+
+func clear_input():
+	input.clear()
+	input.call_deferred("edit")
