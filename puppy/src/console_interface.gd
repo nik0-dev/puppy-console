@@ -156,6 +156,9 @@ func set_container_margins(dictionary: Dictionary):
 	for key in dictionary.keys():
 		margins.add_theme_constant_override(key, dictionary[key])
 
+func clear_output(): 
+	output.text = ""
+	
 func clear_input():
 	input.clear()
 	input.call_deferred("edit")
