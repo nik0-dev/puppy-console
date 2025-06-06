@@ -26,9 +26,18 @@ const ACTIONS : Dictionary[Action, Key] = {
 
 func _enter_tree() -> void:
 	add_child(interface)
+
+## return type
+func test(a: int, b: int) -> void:
+	pass
 	
-func _ready() -> void:
+func _ready():
 	interface.input.text_submitted.connect(process_command)
+	
+	var parser := ScriptParser.new(get_script())
+
+	var method_info := parser.get_method_info("test")
+	if method_info.is_ok(): print(method_info)
 
 func _input(event: InputEvent) -> void:
 	var ctrl_pressed : bool = false

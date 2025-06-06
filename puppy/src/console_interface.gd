@@ -162,3 +162,7 @@ func clear_output():
 func clear_input():
 	input.clear()
 	input.call_deferred("edit")
+
+func set_input(text: String):
+	input.text = text
+	input.call_deferred("edit")
