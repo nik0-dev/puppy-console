@@ -148,22 +148,22 @@ func history_prev(): pass
 ## value: a callable that retrieves the current weight
 ## size: how big the bar should be 
 func create_progress_bar_monitor(
-	min: Variant, max: Variant, value: Variant, size: Variant
+	min_v: Variant, max_v: Variant, value: Variant, size: Variant
 ):
-	if typeof(min) == TYPE_CALLABLE: min = min.call()
-	if typeof(max) == TYPE_CALLABLE: max = max.call()
+	if typeof(min_v) == TYPE_CALLABLE: min_v = min.call()
+	if typeof(max_v) == TYPE_CALLABLE: max_v = max.call()
 	if typeof(value) == TYPE_CALLABLE: value = value.call()
 	if typeof(size) == TYPE_CALLABLE: size = size.call()
 	
-	if typeof(min) != TYPE_INT || typeof(min) != TYPE_FLOAT: min = 0.0
-	if typeof(max) != TYPE_INT || typeof(min) != TYPE_FLOAT: max = 10.0
-	if typeof(value) != TYPE_INT || typeof(min) != TYPE_FLOAT: value = 0.0
-	if typeof(size) != TYPE_INT || typeof(min) != TYPE_FLOAT: size = 5.0
+	if typeof(min_v) != TYPE_INT || typeof(min_v) != TYPE_FLOAT: min_v = 0.0
+	if typeof(max_v) != TYPE_INT || typeof(min_v) != TYPE_FLOAT: max_v = 10.0
+	if typeof(value) != TYPE_INT || typeof(value) != TYPE_FLOAT: value = 0.0
+	if typeof(size) != TYPE_INT || typeof(size) != TYPE_FLOAT: size = 5.0
 
-	var inv_lerp_res : float = inverse_lerp(min, max, value)
+	var inv_lerp_res : float = inverse_lerp(min_v, max_v, value)
 	inv_lerp_res = clampf(inv_lerp_res, 0, 1.0)
 	var lerp_res : float = lerpf(0, size, inv_lerp_res) 
-	return "[%s%s]" % ["#".repeat(lerp_res), ".".repeat(size - floor(lerp_res))]
+	return "[%s%s]" % ["#".repeat(floor(lerp_res)), ".".repeat(floor(size - floor(lerp_res)))]
 
 func cls(): interface.clear_output()
 
