@@ -91,6 +91,7 @@ func _init_input():
 	input.caret_blink_interval = 0.2
 	input.placeholder_text = _DEFAULT_INPUT_PLACEHOLDER_TEXT
 	input.shortcut_keys_enabled = false
+	input.context_menu_enabled = false
 	_init_input_style()
 
 func _init_backing_style():
