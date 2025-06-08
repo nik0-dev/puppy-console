@@ -128,15 +128,39 @@ func _input(event: InputEvent) -> void:
 			monitors_visible = !monitors_visible
 		if event.is_match(SETTINGS.DOCK_LEFT):
 			var size = DisplayServer.window_get_size()
-			interface.handle.size = Vector2(size.x/2, size.y) 
+			interface.handle.size = Vector2(size.x/2, size.y)
+			interface.handle.position = Vector2.ZERO 
 		if event.is_match(SETTINGS.DOCK_TOP_LEFT):
 			interface.handle.size = DisplayServer.window_get_size() / 2
+			interface.handle.position = Vector2.ZERO
 		if event.is_match(SETTINGS.DOCK_FULL):
 			interface.handle.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			interface.handle.position = Vector2.ZERO
+		if event.is_match(SETTINGS.DOCK_TOP):
+			var size = DisplayServer.window_get_size()
+			interface.handle.size = Vector2(size.x, size.y/2)
+			interface.handle.position = Vector2.ZERO
+		if event.is_match(SETTINGS.DOCK_TOP_RIGHT):
+			var size = DisplayServer.window_get_size()
+			interface.handle.size = Vector2(size.x/2, size.y/2)
+			interface.handle.position = Vector2(size.x/2, 0)
+		if event.is_match(SETTINGS.DOCK_BOTTOM_LEFT):
+			var size = DisplayServer.window_get_size()
+			interface.handle.size = Vector2(size.x/2, size.y/2)
+			interface.handle.position = Vector2(0, size.y/2)
+		if event.is_match(SETTINGS.DOCK_BOTTOM):
+			var size = DisplayServer.window_get_size()
+			interface.handle.size = Vector2(size.x, size.y/2)
+			interface.handle.position = Vector2(0, size.y/2)
+		if event.is_match(SETTINGS.DOCK_BOTTOM_RIGHT):
+			var size = DisplayServer.window_get_size()
+			interface.handle.size = Vector2(size.x/2, size.y/2)
+			interface.handle.position = Vector2(size.x/2, size.y/2)
+		if event.is_match(SETTINGS.DOCK_RIGHT):
+			var size = DisplayServer.window_get_size()
+			interface.handle.size = Vector2(size.x/2, size.y)
+			interface.handle.position = Vector2(size.x/2, 0)
 			
-		
-		
-		
 	if event is InputEventKey && event.is_command_or_control_pressed():
 		get_viewport().set_input_as_handled()
 	
@@ -156,7 +180,4 @@ func cls(): interface.clear_output()
 func process_command(command: String):
 	interface.write_line(command)
 	var argv : Array = command.split(" ", false)
-	
-	interface.write_line("argv: " + str(argv))
-	interface.write_line("argt: " + str(argv.map(func(v): return type_string(typeof(str_to_var(v))))))
 	interface.clear_input()

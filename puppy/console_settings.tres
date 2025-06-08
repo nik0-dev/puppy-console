@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ConsoleSettings" load_steps=28 format=3 uid="uid://b0ll8gl1o22oy"]
+[gd_resource type="Resource" script_class="ConsoleSettings" load_steps=29 format=3 uid="uid://b0ll8gl1o22oy"]
 
 [ext_resource type="Script" uid="uid://bsl3s4c2pn0h7" path="res://puppy/src/console_settings.gd" id="1_ysel6"]
 
@@ -53,6 +53,12 @@ device = -1
 shift_pressed = true
 ctrl_pressed = true
 keycode = 4194318
+
+[sub_resource type="InputEventKey" id="InputEventKey_ysel6"]
+device = -1
+shift_pressed = true
+ctrl_pressed = true
+keycode = 4194324
 
 [sub_resource type="InputEventKey" id="InputEventKey_nrhoo"]
 device = -1
@@ -164,6 +170,7 @@ DOCK_FULL = SubResource("InputEventKey_nrhoo")
 DOCK_RIGHT = SubResource("InputEventKey_7bscm")
 DOCK_BOTTOM_LEFT = SubResource("InputEventKey_ms40d")
 DOCK_BOTTOM = SubResource("InputEventKey_hxndw")
+DOCK_BOTTOM_RIGHT = SubResource("InputEventKey_ysel6")
 SELECT_ALL_INPUT_EVENT = SubResource("InputEventKey_tl00f")
 CLEAR_INPUT_EVENT = SubResource("InputEventKey_anlxk")
 HISTORY_NEXT_EVENT = SubResource("InputEventKey_25kvy")
