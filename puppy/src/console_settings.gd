@@ -1,4 +1,6 @@
+@icon("res://puppy/res/console_settings.svg")
 class_name ConsoleSettings extends Resource
+
 @export_group("General")
 
 ## the rate at which the internal "monitors" update.
@@ -15,6 +17,7 @@ class_name ConsoleSettings extends Resource
 @export var RESET_FONT_SIZE_EVENT : InputEvent
 @export var TOGGLE_MONITORS : InputEvent
 
+@export_subgroup("Docking")
 @export var DOCK_TOP_LEFT : InputEvent
 @export var DOCK_TOP : InputEvent
 @export var DOCK_TOP_RIGHT : InputEvent

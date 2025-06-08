@@ -30,7 +30,7 @@ var restore_state : String = ""
 
 enum Workspace { COMMAND_LINE, MONITORS }
 
-const SETTINGS : ConsoleSettings = preload("res://puppy/res/console_settings.tres")
+var SETTINGS : ConsoleSettings = preload("res://puppy/console_settings.tres")
 
 func _enter_tree() -> void:
 	add_child(interface)
@@ -41,9 +41,6 @@ func _ready():
 	interface.input.text_submitted.connect(process_command)
 	add_child(_monitor_timer)
 	
-	monitors["randf"] = randf
-	monitors["randf_range"] = randf_range.bind(20.0, 100.0)
-	
 	_monitor_timer.one_shot = false
 	_monitor_timer.start(SETTINGS.MONITOR_UPDATE_RATE)
 	_monitor_timer.timeout.connect(_monitor_tick)
@@ -53,7 +50,6 @@ func _monitor_tick():
 		cls()
 		for monitor in monitors:
 			interface.write_line("%s: %s" % [monitor, monitors[monitor].call()])
-	
 	
 func _input(event: InputEvent) -> void:
 	if !event.is_echo() && event.is_pressed():
@@ -146,6 +142,28 @@ func _input(event: InputEvent) -> void:
 	
 func history_next(): pass
 func history_prev(): pass
+
+## min: a callable that retrieves the minimum value
+## max: a callable that retrieves the maximum value
+## value: a callable that retrieves the current weight
+## size: how big the bar should be 
+func create_progress_bar_monitor(
+	min: Variant, max: Variant, value: Variant, size: Variant
+):
+	if typeof(min) == TYPE_CALLABLE: min = min.call()
+	if typeof(max) == TYPE_CALLABLE: max = max.call()
+	if typeof(value) == TYPE_CALLABLE: value = value.call()
+	if typeof(size) == TYPE_CALLABLE: size = size.call()
+	
+	if typeof(min) != TYPE_INT || typeof(min) != TYPE_FLOAT: min = 0.0
+	if typeof(max) != TYPE_INT || typeof(min) != TYPE_FLOAT: max = 10.0
+	if typeof(value) != TYPE_INT || typeof(min) != TYPE_FLOAT: value = 0.0
+	if typeof(size) != TYPE_INT || typeof(min) != TYPE_FLOAT: size = 5.0
+
+	var inv_lerp_res : float = inverse_lerp(min, max, value)
+	inv_lerp_res = clampf(inv_lerp_res, 0, 1.0)
+	var lerp_res : float = lerpf(0, size, inv_lerp_res) 
+	return "[%s%s]" % ["#".repeat(lerp_res), ".".repeat(size - floor(lerp_res))]
 
 func cls(): interface.clear_output()
 
