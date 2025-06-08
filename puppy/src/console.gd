@@ -44,7 +44,7 @@ func _ready():
 	_monitor_timer.one_shot = false
 	_monitor_timer.start(SETTINGS.MONITOR_UPDATE_RATE)
 	_monitor_timer.timeout.connect(_monitor_tick)
-
+	
 func _monitor_tick():
 	if monitors_visible:
 		cls()
@@ -143,27 +143,13 @@ func _input(event: InputEvent) -> void:
 func history_next(): pass
 func history_prev(): pass
 
-## min: a callable that retrieves the minimum value
-## max: a callable that retrieves the maximum value
-## value: a callable that retrieves the current weight
-## size: how big the bar should be 
-func create_progress_bar_monitor(
-	min_v: Variant, max_v: Variant, value: Variant, size: Variant
-):
-	if typeof(min_v) == TYPE_CALLABLE: min_v = min.call()
-	if typeof(max_v) == TYPE_CALLABLE: max_v = max.call()
-	if typeof(value) == TYPE_CALLABLE: value = value.call()
-	if typeof(size) == TYPE_CALLABLE: size = size.call()
+func create_progress_bar_monitor(progress: Callable, size: Variant = 10):
+	var progress_res = progress.call()
+	if typeof(progress_res) != TYPE_FLOAT: return "Nil"
 	
-	if typeof(min_v) != TYPE_INT || typeof(min_v) != TYPE_FLOAT: min_v = 0.0
-	if typeof(max_v) != TYPE_INT || typeof(min_v) != TYPE_FLOAT: max_v = 10.0
-	if typeof(value) != TYPE_INT || typeof(value) != TYPE_FLOAT: value = 0.0
-	if typeof(size) != TYPE_INT || typeof(size) != TYPE_FLOAT: size = 5.0
-
-	var inv_lerp_res : float = inverse_lerp(min_v, max_v, value)
-	inv_lerp_res = clampf(inv_lerp_res, 0, 1.0)
-	var lerp_res : float = lerpf(0, size, inv_lerp_res) 
-	return "[%s%s]" % ["#".repeat(floor(lerp_res)), ".".repeat(floor(size - floor(lerp_res)))]
+	var lerp_res : float = lerpf(0, size, progress_res) 
+	@warning_ignore("narrowing_conversion")
+	return "[%s%s]" % ["#".repeat(lerp_res), ".".repeat(size - floor(lerp_res))]
 
 func cls(): interface.clear_output()
 
