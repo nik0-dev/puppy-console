@@ -5,60 +5,154 @@ class_name Console extends Node
 #------------------------------------------------#
 
 var interface := ConsoleInterface.new()
+var history : Array[String] = []
+var history_idx : int = 0
+var commands : Dictionary[String, Callable]
 
-enum Action {
-	SELECT_INPUT,
-	CLEAR_OUTPUT,
-	CLEAR_INPUT,
-	TOGGLE_VISIBILITY,
-	HISTORY_NEXT,
-	HISTORY_PREV
-}
+var _monitor_timer := Timer.new()
+var monitors_visible : bool:
+	set(value):
+		if value == true:
+			restore_state = interface.output.text
+			interface.set_status("Working Node: N/A | Workspace: Monitors")
+			interface.input.editable = false
+			interface.clear_input()
+			interface.input.placeholder_text = "Unavailable in Monitors Workspace."
+		else:
+			interface.output.text = restore_state
+			interface.set_status("Working Node: N/A | Workspace: Command Line")
+			interface.input.editable = true
+			interface.input.call_deferred("grab_focus")
+			interface.input.placeholder_text = interface._DEFAULT_INPUT_PLACEHOLDER_TEXT
+		monitors_visible = value
+		
+var restore_state : String = ""
 
-const ACTIONS : Dictionary[Action, Key] = {
-	Action.SELECT_INPUT: KEY_A,
-	Action.CLEAR_OUTPUT: KEY_L,
-	Action.CLEAR_INPUT: KEY_X,
-	Action.TOGGLE_VISIBILITY: KEY_F7,
-	Action.HISTORY_NEXT: KEY_UP,
-	Action.HISTORY_PREV: KEY_DOWN
-}
+enum Workspace { COMMAND_LINE, MONITORS }
+
+const SETTINGS : ConsoleSettings = preload("res://puppy/res/console_settings.tres")
 
 func _enter_tree() -> void:
 	add_child(interface)
-
-## return type
-func test(a: int, b: int) -> void:
-	pass
 	
+var monitors : Dictionary[String, Callable]
+
 func _ready():
 	interface.input.text_submitted.connect(process_command)
+	add_child(_monitor_timer)
+	
+	monitors["randf"] = randf
+	monitors["randf_range"] = randf_range.bind(20.0, 100.0)
+	
+	_monitor_timer.one_shot = false
+	_monitor_timer.start(SETTINGS.MONITOR_UPDATE_RATE)
+	_monitor_timer.timeout.connect(_monitor_tick)
+
+func _monitor_tick():
+	if monitors_visible:
+		cls()
+		for monitor in monitors:
+			interface.write_line("%s: %s" % [monitor, monitors[monitor].call()])
+	
 	
 func _input(event: InputEvent) -> void:
-	var ctrl_pressed : bool = false
-	
-	if event is InputEventWithModifiers:
-		ctrl_pressed = event.ctrl_pressed 
-	
-	if event is InputEventKey:
-		if !event.is_echo() && event.is_pressed():
-			match event.keycode:
-				ACTIONS[Action.HISTORY_NEXT]: history_next()
-				ACTIONS[Action.HISTORY_PREV]: history_prev()
-				ACTIONS[Action.TOGGLE_VISIBILITY]: interface.visible = !interface.visible
+	if !event.is_echo() && event.is_pressed():
+		if interface.output.has_focus():
+			if event.is_match(SETTINGS.SELECT_ALL_OUTPUT_EVENT):
+				interface.output.select_all()
+			if event.is_match(SETTINGS.COPY_OUTPUT_EVENT):
+				DisplayServer.clipboard_set(interface.output.get_selected_text())
+		
+		if interface.input.has_focus():
+			if event.is_match(SETTINGS.CLEAR_INPUT_EVENT):
+				interface.clear_input()
+			if event.is_match(SETTINGS.SELECT_ALL_INPUT_EVENT):
+				interface.input.select()
+			if event.is_match(SETTINGS.COPY_INPUT_EVENT):
+				if interface.input.has_selection():
+					DisplayServer.clipboard_set(interface.input.get_selected_text())
+			if event.is_match(SETTINGS.PASTE_INPUT_EVENT):
+				if interface.input.has_selection():
+					var from = interface.input.get_selection_from_column()
+					var to = interface.input.get_selection_to_column()
+					interface.input.delete_text(from, to)
+					interface.input.deselect()
+				interface.input.insert_text_at_caret(DisplayServer.clipboard_get())
+			if event.is_match(SETTINGS.NEXT_WORD_EVENT) || event.is_match(SETTINGS.DELETE_NEXT_WORD_EVENT):
+				var from : int = interface.input.caret_column
+				if !interface.input.text.is_empty():
+					if interface.input.caret_column != interface.input.text.length():
+						var initial_lookahead = interface.input.text[interface.input.caret_column]
+						var initial_pos = interface.input.caret_column 
+				
+						for i in range(initial_pos, interface.input.text.length()):
+							if initial_lookahead == " ":
+								if interface.input.text[interface.input.caret_column] != " ": break
+							if initial_lookahead != " ":
+								if interface.input.text[interface.input.caret_column] == " ": break
+							interface.input.caret_column += 1
+				var to : int = interface.input.caret_column
+				if event.is_match(SETTINGS.DELETE_NEXT_WORD_EVENT): 
+					interface.input.delete_text(min(from,to), max(from,to))
+							
+			if event.is_match(SETTINGS.PREV_WORD_EVENT) || event.is_match(SETTINGS.DELETE_LAST_WORD_EVENT):
+				var from : int = interface.input.caret_column
+				if !interface.input.text.is_empty():
+					if interface.input.caret_column != 0:
+						var initial_lookbehind = interface.input.text[interface.input.caret_column - 1]
+						var initial_pos = interface.input.caret_column 
+				
+						for i in range(initial_pos, -1, -1):
+							if initial_lookbehind == " ":
+								if interface.input.text[interface.input.caret_column - 1] != " ": break
+							if initial_lookbehind != " ":
+								if interface.input.text[interface.input.caret_column - 1] == " ": break
+							interface.input.caret_column -= 1
+				var to : int = interface.input.caret_column
+				if event.is_match(SETTINGS.DELETE_LAST_WORD_EVENT): 
+					interface.input.delete_text(min(from,to), max(from,to))
 			
-			if ctrl_pressed:
-				match event.keycode:
-					ACTIONS[Action.CLEAR_OUTPUT]: cls()
-					ACTIONS[Action.CLEAR_INPUT]: interface.clear_input()
-					ACTIONS[Action.SELECT_INPUT]: interface.input.select()
-				get_viewport().set_input_as_handled()
+			
+			if event.is_match(SETTINGS.HISTORY_NEXT_EVENT):
+				pass
+			if event.is_match(SETTINGS.HISTORY_PREV_EVENT):
+				pass
+		
+		if event.is_match(SETTINGS.INCREASE_FONT_SIZE_EVENT):
+			interface.font_size += 1
+		if event.is_match(SETTINGS.DECREASE_FONT_SIZE_EVENT):
+			interface.font_size -= 1
+		if event.is_match(SETTINGS.CLEAR_OUTPUT_EVENT):
+			interface.clear_output()
+		if event.is_match(SETTINGS.TOGGLE_CONSOLE_VISIBILITY_EVENT):
+			interface.visible = !interface.visible
+		if event.is_match(SETTINGS.RESET_FONT_SIZE_EVENT):
+			interface.set_font_size(ConsoleInterface._DEFAULT_FONT_SIZE)
+		if event.is_match(SETTINGS.TOGGLE_MONITORS):
+			monitors_visible = !monitors_visible
+		if event.is_match(SETTINGS.DOCK_LEFT):
+			var size = DisplayServer.window_get_size()
+			interface.handle.size = Vector2(size.x/2, size.y) 
+		if event.is_match(SETTINGS.DOCK_TOP_LEFT):
+			interface.handle.size = DisplayServer.window_get_size() / 2
+		if event.is_match(SETTINGS.DOCK_FULL):
+			interface.handle.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			
+		
+		
+		
+	if event is InputEventKey && event.is_command_or_control_pressed():
+		get_viewport().set_input_as_handled()
 	
 func history_next(): pass
 func history_prev(): pass
 
 func cls(): interface.clear_output()
-	
+
 func process_command(command: String):
 	interface.write_line(command)
+	var argv : Array = command.split(" ", false)
+	
+	interface.write_line("argv: " + str(argv))
+	interface.write_line("argt: " + str(argv.map(func(v): return type_string(typeof(str_to_var(v))))))
 	interface.clear_input()

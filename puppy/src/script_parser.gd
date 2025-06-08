@@ -19,8 +19,7 @@ class ScriptParserMethodResult:
 	func is_ok(): return _is_ok
 	
 	func _to_string() -> String:
-		return "{ name: %s, doc: %s, params: %s, return %s }" % [_name, _doc_comment, _parameters, _return]
-
+		return "{ name: \"%s\", doc: \"%s\", params: %s, return \"%s\" }" % [_name, _doc_comment, _parameters, _return]
 
 @warning_ignore("shadowed_variable")
 func _init(data: Script) -> void:
@@ -28,20 +27,18 @@ func _init(data: Script) -> void:
 
 func get_method_info(method_name: String) -> ScriptParserMethodResult:
 	var regex := RegEx.new()
-	var DOC := r"(?:#{2,} +(?<doc>.+)\s+)?"
-	var NAME := r"func +(?<name>%s)" % method_name
-	var PARAMS := r"\((?<params>.*)\)"
-	var RETURN := r"(?: *-> *(?<return>[^ ]+))? *:"
-	var regex_str := DOC + NAME + PARAMS + RETURN
-	regex.compile(regex_str)
+	regex.compile(r"(?:#{2,} (?<doc>.+)\s+)?func +(?<name>%s)\((?<params>.+)?\) *(?:-> *(?<return>.+\b) *)?" % method_name)
 	
 	var res := ScriptParserMethodResult.new()
 	var regex_match = regex.search(data.source_code)
 	
+	## (.+?(?:\[.*,.*\])?)(?:,\s*|$) -- comma separated regex
+	
 	if regex_match != null:
 		res._name = regex_match.get_string("name")
 		res._doc_comment = regex_match.get_string("doc")
-		res._parameters = regex_match.get_string("params")
+		regex.compile(r"(.+?(?:\[.*,.*\])?)(?:,\s*|$)")
+		res._parameters = str(regex.search_all(regex_match.get_string("params")).map(func(m: RegExMatch): return m.get_string(1)))
 		res._return = regex_match.get_string("return")
 		
 		res._is_ok = true

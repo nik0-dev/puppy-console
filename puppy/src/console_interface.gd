@@ -31,6 +31,7 @@ const _DEFAULT_CONTAINER_MARGINS : Dictionary[String, int] = {
 const _DEFAULT_MARGIN_VALUE : int = 10 
 const _DEFAULT_INPUT_PLACEHOLDER_TEXT : String = "Type 'commands' to see all available commands."
 const _DEFAULT_FONT : Font = preload("res://puppy/res/DepartureMonoNerdFontMono-Regular.otf")
+const _DEFAULT_FONT_SIZE : int = 11
 const _DEFAULT_BORDER_VALUE : int = 1
 
 func _init():
@@ -44,8 +45,8 @@ func _init():
 	_init_input()
 	
 	set_font(_DEFAULT_FONT)
-	set_font_size(11)
-	
+	set_font_size(_DEFAULT_FONT_SIZE)
+	set_status("Working Node: N/A | Monitors")
 	
 func _init_handle():
 	add_child(handle)
@@ -77,6 +78,7 @@ func _init_output():
 	output.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	output.selection_enabled = true
 	output.bbcode_enabled = true
+	output.shortcut_keys_enabled = false
 	_init_output_style()
 
 func _init_status():
@@ -86,7 +88,9 @@ func _init_status():
 func _init_input():
 	vbox.add_child(input)
 	input.caret_blink = true
+	input.caret_blink_interval = 0.2
 	input.placeholder_text = _DEFAULT_INPUT_PLACEHOLDER_TEXT
+	input.shortcut_keys_enabled = false
 	_init_input_style()
 
 func _init_backing_style():
@@ -106,13 +110,18 @@ func _init_output_style():
 
 func _init_status_style():
 	status_style.bg_color = Color.DARK_BLUE
+	status_style.content_margin_left = _DEFAULT_MARGIN_VALUE
 	status.add_theme_stylebox_override("normal", status_style)
 
 func _init_input_style():
 	input_style.bg_color = Color.BLACK
 	input_style.content_margin_left = _DEFAULT_MARGIN_VALUE
+	var disabled_style : StyleBoxFlat = input_style.duplicate()
+	disabled_style.bg_color.a = 0.2
 	input.add_theme_stylebox_override("normal", input_style)
 	input.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	input.add_theme_stylebox_override("read_only", disabled_style)
+
 
 func set_status(text: String): status.text = text
 func set_title(text: String): title.text = text
@@ -137,17 +146,19 @@ func set_font_size(new_font_size: int):
 	output.add_theme_font_size_override("bold_italics_font_size", new_font_size)
 	status.add_theme_font_size_override("font_size", new_font_size)
 	input.add_theme_font_size_override("font_size", new_font_size)
+	font_size = new_font_size
 
 func set_bg(color: Color):
 	output_style.bg_color = Color(color, 1.0)
 	output.add_theme_stylebox_override("normal", output_style)
-
+	
 func set_fg(color: Color):
 	output.add_theme_color_override("default_color", Color(color, 1.0))
 
 func set_opacity(value: float):
 	output_style.bg_color.a = value
 	output.add_theme_stylebox_override("normal", output_style)
+	opacity = value
 
 func write(text: String): output.text += text
 func write_line(text: String): output.text += text + "\n"
@@ -166,3 +177,4 @@ func clear_input():
 func set_input(text: String):
 	input.text = text
 	input.call_deferred("edit")
+	input.caret_column = input.text.length()

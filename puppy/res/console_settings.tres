@@ -1,0 +1,187 @@
+[gd_resource type="Resource" script_class="ConsoleSettings" load_steps=29 format=3 uid="uid://b0ll8gl1o22oy"]
+
+[ext_resource type="Script" uid="uid://bsl3s4c2pn0h7" path="res://puppy/src/console_settings.gd" id="1_tl00f"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_anlxk"]
+device = -1
+ctrl_pressed = true
+keycode = 88
+unicode = 120
+
+[sub_resource type="InputEventKey" id="InputEventKey_g80re"]
+device = -1
+ctrl_pressed = true
+keycode = 76
+unicode = 108
+
+[sub_resource type="InputEventKey" id="InputEventKey_yjx51"]
+device = -1
+ctrl_pressed = true
+keycode = 67
+unicode = 99
+
+[sub_resource type="InputEventKey" id="InputEventKey_p4usj"]
+device = -1
+ctrl_pressed = true
+keycode = 67
+unicode = 99
+
+[sub_resource type="InputEventKey" id="InputEventKey_uxakb"]
+device = -1
+ctrl_pressed = true
+keycode = 45
+unicode = 45
+
+[sub_resource type="InputEventKey" id="InputEventKey_ctvlg"]
+device = -1
+ctrl_pressed = true
+keycode = 4194308
+
+[sub_resource type="InputEventKey" id="InputEventKey_0wt5d"]
+device = -1
+ctrl_pressed = true
+keycode = 4194312
+
+[sub_resource type="InputEventKey" id="InputEventKey_hxndw"]
+device = -1
+shift_pressed = true
+ctrl_pressed = true
+keycode = 4194322
+
+[sub_resource type="InputEventKey" id="InputEventKey_ms40d"]
+device = -1
+shift_pressed = true
+ctrl_pressed = true
+keycode = 4194318
+
+[sub_resource type="InputEventKey" id="InputEventKey_y0rec"]
+device = -1
+shift_pressed = true
+ctrl_pressed = true
+keycode = 4194324
+
+[sub_resource type="InputEventKey" id="InputEventKey_nrhoo"]
+device = -1
+shift_pressed = true
+ctrl_pressed = true
+keycode = 4194316
+
+[sub_resource type="InputEventKey" id="InputEventKey_5kwj6"]
+device = -1
+shift_pressed = true
+ctrl_pressed = true
+keycode = 4194319
+
+[sub_resource type="InputEventKey" id="InputEventKey_7bscm"]
+device = -1
+shift_pressed = true
+ctrl_pressed = true
+keycode = 4194321
+
+[sub_resource type="InputEventKey" id="InputEventKey_3cmta"]
+device = -1
+shift_pressed = true
+ctrl_pressed = true
+keycode = 4194320
+
+[sub_resource type="InputEventKey" id="InputEventKey_3008e"]
+device = -1
+shift_pressed = true
+ctrl_pressed = true
+keycode = 4194317
+
+[sub_resource type="InputEventKey" id="InputEventKey_xm2x6"]
+device = -1
+shift_pressed = true
+ctrl_pressed = true
+keycode = 4194323
+
+[sub_resource type="InputEventKey" id="InputEventKey_25kvy"]
+device = -1
+keycode = 4194320
+
+[sub_resource type="InputEventKey" id="InputEventKey_wjyps"]
+device = -1
+keycode = 4194322
+
+[sub_resource type="InputEventKey" id="InputEventKey_52yh2"]
+device = -1
+ctrl_pressed = true
+keycode = 61
+unicode = 61
+
+[sub_resource type="InputEventKey" id="InputEventKey_jxagn"]
+device = -1
+ctrl_pressed = true
+keycode = 4194321
+
+[sub_resource type="InputEventKey" id="InputEventKey_0r40v"]
+device = -1
+ctrl_pressed = true
+keycode = 86
+unicode = 118
+
+[sub_resource type="InputEventKey" id="InputEventKey_lf6cj"]
+device = -1
+ctrl_pressed = true
+keycode = 4194319
+
+[sub_resource type="InputEventKey" id="InputEventKey_vx4am"]
+device = -1
+ctrl_pressed = true
+keycode = 48
+unicode = 48
+
+[sub_resource type="InputEventKey" id="InputEventKey_tl00f"]
+device = -1
+ctrl_pressed = true
+keycode = 65
+unicode = 97
+
+[sub_resource type="InputEventKey" id="InputEventKey_gtaif"]
+device = -1
+ctrl_pressed = true
+keycode = 65
+unicode = 97
+
+[sub_resource type="InputEventKey" id="InputEventKey_vo7fs"]
+device = -1
+keycode = 4194338
+
+[sub_resource type="InputEventKey" id="InputEventKey_xphtw"]
+device = -1
+ctrl_pressed = true
+keycode = 80
+unicode = 112
+
+[resource]
+script = ExtResource("1_tl00f")
+MONITOR_UPDATE_RATE = 0.167
+TOGGLE_CONSOLE_VISIBILITY_EVENT = SubResource("InputEventKey_vo7fs")
+INCREASE_FONT_SIZE_EVENT = SubResource("InputEventKey_52yh2")
+DECREASE_FONT_SIZE_EVENT = SubResource("InputEventKey_uxakb")
+RESET_FONT_SIZE_EVENT = SubResource("InputEventKey_vx4am")
+TOGGLE_MONITORS = SubResource("InputEventKey_xphtw")
+DOCK_TOP_LEFT = SubResource("InputEventKey_3008e")
+DOCK_TOP = SubResource("InputEventKey_3cmta")
+DOCK_TOP_RIGHT = SubResource("InputEventKey_xm2x6")
+DOCK_LEFT = SubResource("InputEventKey_5kwj6")
+DOCK_FULL = SubResource("InputEventKey_nrhoo")
+DOCK_RIGHT = SubResource("InputEventKey_7bscm")
+DOCK_BOTTOM_LEFT = SubResource("InputEventKey_ms40d")
+DOCK_BOTTOM = SubResource("InputEventKey_hxndw")
+DOCK_BOTTOM_RIGHT = SubResource("InputEventKey_y0rec")
+SELECT_ALL_INPUT_EVENT = SubResource("InputEventKey_tl00f")
+CLEAR_INPUT_EVENT = SubResource("InputEventKey_anlxk")
+HISTORY_NEXT_EVENT = SubResource("InputEventKey_25kvy")
+HISTORY_PREV_EVENT = SubResource("InputEventKey_wjyps")
+COPY_INPUT_EVENT = SubResource("InputEventKey_yjx51")
+PASTE_INPUT_EVENT = SubResource("InputEventKey_0r40v")
+NEXT_WORD_EVENT = SubResource("InputEventKey_jxagn")
+PREV_WORD_EVENT = SubResource("InputEventKey_lf6cj")
+DELETE_LAST_WORD_EVENT = SubResource("InputEventKey_ctvlg")
+DELETE_NEXT_WORD_EVENT = SubResource("InputEventKey_0wt5d")
+SELECT_ALL_OUTPUT_EVENT = SubResource("InputEventKey_gtaif")
+CLEAR_OUTPUT_EVENT = SubResource("InputEventKey_g80re")
+COPY_OUTPUT_EVENT = SubResource("InputEventKey_p4usj")
+metadata/_custom_type_script = "uid://bsl3s4c2pn0h7"
