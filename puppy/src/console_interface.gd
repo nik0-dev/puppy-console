@@ -12,18 +12,8 @@ var input := LineEdit.new()
 var font : Font: set = set_font
 var font_size : int: set = set_font_size
 
-const _DEFAULT_VBOX_SEPARATION : int = 0
-const _DEFAULT_TITLE : String = "Developer Console"
-const _DEFAULT_INPUT_PLACEHOLDER_TEXT : String = "Type 'commands' to see all available commands."
 const _DEFAULT_BORDER_VALUE : int = 1
 const _DEFAULT_STATUS_FORMATTER = "Working Node: %s | Workspace: %s"
-const _DEFAULT_MARGIN_VALUE : int = 10 
-const _DEFAULT_CONTAINER_MARGINS : Dictionary[String, int] = {
-	"margin_left": _DEFAULT_MARGIN_VALUE,
-	"margin_right": _DEFAULT_MARGIN_VALUE,
-	"margin_top": _DEFAULT_MARGIN_VALUE,
-	"margin_bottom": _DEFAULT_MARGIN_VALUE
-} 
 
 func _init():
 	_init_handle()
@@ -35,6 +25,7 @@ func _init():
 	_init_status()
 	_init_input()
 	
+	set_title(Console.SETTINGS.TITLE)
 	set_font(Console.SETTINGS.FONT)
 	set_font_size(Console.SETTINGS.FONT_SIZE)
 	
@@ -45,7 +36,10 @@ func _init_handle():
 func _init_margins():
 	handle.add_child(margins)
 	margins.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	set_container_margins(_DEFAULT_CONTAINER_MARGINS)
+	margins.add_theme_constant_override("margin_top", Console.SETTINGS.MARGIN_TOP)
+	margins.add_theme_constant_override("margin_right", Console.SETTINGS.MARGIN_RIGHT)
+	margins.add_theme_constant_override("margin_bottom", Console.SETTINGS.MARGIN_BOTTOM)
+	margins.add_theme_constant_override("margin_left", Console.SETTINGS.MARGIN_LEFT)
 
 func _init_backing():
 	margins.add_child(backing)
@@ -60,7 +54,6 @@ func _init_title():
 	vbox.add_child(title)
 	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	set_title(_DEFAULT_TITLE)
 	title.add_theme_stylebox_override("normal", Console.SETTINGS.TITLE_STYLE)
 
 func _init_output():
@@ -80,12 +73,13 @@ func _init_input():
 	vbox.add_child(input)
 	input.caret_blink = true
 	input.caret_blink_interval = 0.2
-	input.placeholder_text = _DEFAULT_INPUT_PLACEHOLDER_TEXT
+	input.placeholder_text = Console.SETTINGS.CLI_INPUT_HINT
 	input.shortcut_keys_enabled = false
 	input.context_menu_enabled = false
 	input.add_theme_stylebox_override("focus", Console.SETTINGS.INPUT_STYLE_FOCUS)
 	input.add_theme_stylebox_override("normal", Console.SETTINGS.INPUT_STYLE_NORMAL)
-	
+	input.add_theme_stylebox_override("read_only", Console.SETTINGS.INPUT_STYLE_READ_ONLY)
+
 func set_status(text: String): status.text = text
 func set_title(text: String): title.text = text
 
@@ -113,10 +107,6 @@ func set_font_size(new_font_size: int):
 
 func write(text: String): output.text += text
 func write_line(text: String): output.text += text + "\n"
-
-func set_container_margins(dictionary: Dictionary):
-	for key in dictionary.keys():
-		margins.add_theme_constant_override(key, dictionary[key])
 
 func clear_output(): 
 	output.text = ""

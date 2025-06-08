@@ -25,7 +25,7 @@ var monitors_visible : bool:
 			])
 			interface.input.editable = false
 			interface.clear_input()
-			interface.input.placeholder_text = "Unavailable in Monitors Workspace."
+			interface.input.placeholder_text = Console.SETTINGS.MONITOR_INPUT_HINT
 		else:
 			interface.output.text = restore_state
 			interface.set_status(ConsoleInterface._DEFAULT_STATUS_FORMATTER % [
@@ -34,12 +34,12 @@ var monitors_visible : bool:
 			])
 			interface.input.editable = true
 			interface.input.call_deferred("grab_focus")
-			interface.input.placeholder_text = interface._DEFAULT_INPUT_PLACEHOLDER_TEXT
+			interface.input.placeholder_text = Console.SETTINGS.CLI_INPUT_HINT
 		monitors_visible = value
 		
 var restore_state : String = ""
 
-static var SETTINGS : ConsoleSettings = preload("res://puppy/console_settings.tres")
+static var SETTINGS : ConsoleSettings = preload("res://puppy/CONFIG.tres")
 
 func _enter_tree() -> void:
 	add_child(interface)

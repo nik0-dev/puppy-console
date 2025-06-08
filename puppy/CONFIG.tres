@@ -1,14 +1,14 @@
-[gd_resource type="Resource" script_class="ConsoleSettings" load_steps=37 format=3 uid="uid://b0ll8gl1o22oy"]
+[gd_resource type="Resource" script_class="ConsoleSettings" load_steps=37 format=3 uid="uid://dfgw6bcnlhqyh"]
 
-[ext_resource type="FontFile" uid="uid://ctidtlgdj3xrx" path="res://puppy/res/DepartureMonoNerdFontMono-Regular.otf" id="1_3usnb"]
-[ext_resource type="StyleBox" uid="uid://c1al3kxpoku4s" path="res://puppy/res/styles/backing.tres" id="1_euloe"]
-[ext_resource type="Script" uid="uid://bsl3s4c2pn0h7" path="res://puppy/src/console_settings.gd" id="1_ysel6"]
-[ext_resource type="StyleBox" uid="uid://b40evtaerl40d" path="res://puppy/res/styles/empty.tres" id="2_nbi4u"]
-[ext_resource type="StyleBox" uid="uid://ys3ruxgqab6a" path="res://puppy/res/styles/title.tres" id="3_1iova"]
-[ext_resource type="StyleBox" uid="uid://dgk588vb50x1q" path="res://puppy/res/styles/input.tres" id="4_s4inp"]
-[ext_resource type="StyleBox" uid="uid://ct01jv0nyv72c" path="res://puppy/res/styles/input_read_only.tres" id="5_nbck8"]
-[ext_resource type="StyleBox" uid="uid://cyl088vqv6iv2" path="res://puppy/res/styles/output.tres" id="6_d7svn"]
-[ext_resource type="StyleBox" uid="uid://bnx0lnscrc113" path="res://puppy/res/styles/status.tres" id="7_6ncyi"]
+[ext_resource type="StyleBox" uid="uid://c1al3kxpoku4s" path="res://puppy/res/styles/backing.tres" id="1_apdmk"]
+[ext_resource type="FontFile" uid="uid://ctidtlgdj3xrx" path="res://puppy/res/fonts/DepartureMonoNerdFontMono-Regular.otf" id="2_4lysu"]
+[ext_resource type="StyleBox" uid="uid://b40evtaerl40d" path="res://puppy/res/styles/empty.tres" id="3_p6nwj"]
+[ext_resource type="StyleBox" uid="uid://dgk588vb50x1q" path="res://puppy/res/styles/input.tres" id="4_bynvs"]
+[ext_resource type="StyleBox" uid="uid://ct01jv0nyv72c" path="res://puppy/res/styles/input_read_only.tres" id="5_q5adg"]
+[ext_resource type="StyleBox" uid="uid://cyl088vqv6iv2" path="res://puppy/res/styles/output.tres" id="6_2t8hk"]
+[ext_resource type="StyleBox" uid="uid://bnx0lnscrc113" path="res://puppy/res/styles/status.tres" id="7_5rgj3"]
+[ext_resource type="StyleBox" uid="uid://ys3ruxgqab6a" path="res://puppy/res/styles/title.tres" id="8_vixb7"]
+[ext_resource type="Script" uid="uid://bsl3s4c2pn0h7" path="res://puppy/src/console_settings.gd" id="9_byc7j"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_anlxk"]
 device = -1
@@ -163,9 +163,10 @@ keycode = 80
 unicode = 112
 
 [resource]
-script = ExtResource("1_ysel6")
+script = ExtResource("9_byc7j")
+TITLE = "PuppyConsoleGD"
 MONITOR_UPDATE_RATE = 0.167
-FONT = ExtResource("1_3usnb")
+FONT = ExtResource("2_4lysu")
 FONT_SIZE = 11
 TOGGLE_CONSOLE_VISIBILITY_EVENT = SubResource("InputEventKey_vo7fs")
 INCREASE_FONT_SIZE_EVENT = SubResource("InputEventKey_52yh2")
@@ -194,12 +195,19 @@ DELETE_NEXT_WORD_EVENT = SubResource("InputEventKey_0wt5d")
 SELECT_ALL_OUTPUT_EVENT = SubResource("InputEventKey_gtaif")
 CLEAR_OUTPUT_EVENT = SubResource("InputEventKey_g80re")
 COPY_OUTPUT_EVENT = SubResource("InputEventKey_p4usj")
-TITLE_STYLE = ExtResource("3_1iova")
-OUTPUT_STYLE_FOCUS = ExtResource("2_nbi4u")
-OUTPUT_STYLE_NORMAL = ExtResource("6_d7svn")
-INPUT_STYLE_FOCUS = ExtResource("2_nbi4u")
-INPUT_STYLE_NORMAL = ExtResource("4_s4inp")
-INPUT_STYLE_READ_ONLY = ExtResource("5_nbck8")
-STATUS_STYLE = ExtResource("7_6ncyi")
-BACKING_STYLE = ExtResource("1_euloe")
+MARGIN_TOP = 10
+MARGIN_RIGHT = 10
+MARGIN_BOTTOM = 10
+MARGIN_LEFT = 10
+VBOX_SEPARATION = 0
+TITLE_STYLE = ExtResource("8_vixb7")
+OUTPUT_STYLE_FOCUS = ExtResource("3_p6nwj")
+OUTPUT_STYLE_NORMAL = ExtResource("6_2t8hk")
+INPUT_STYLE_FOCUS = ExtResource("3_p6nwj")
+INPUT_STYLE_NORMAL = ExtResource("4_bynvs")
+INPUT_STYLE_READ_ONLY = ExtResource("5_q5adg")
+STATUS_STYLE = ExtResource("7_5rgj3")
+BACKING_STYLE = ExtResource("1_apdmk")
+CLI_INPUT_HINT = "Type 'commands' to see all available commands."
+MONITOR_INPUT_HINT = "Input not allowed in this workspace."
 metadata/_custom_type_script = "uid://bsl3s4c2pn0h7"

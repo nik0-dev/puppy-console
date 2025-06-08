@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://ctidtlgdj3xrx"
-path="res://.godot/imported/DepartureMonoNerdFontMono-Regular.otf-3e136b3157bfe9949f8ac12bd0f829b6.fontdata"
+path="res://.godot/imported/DepartureMonoNerdFontMono-Regular.otf-f3a4728d43f6ec8409c309035e9671e7.fontdata"
 
 [deps]
 
-source_file="res://puppy/res/DepartureMonoNerdFontMono-Regular.otf"
-dest_files=["res://.godot/imported/DepartureMonoNerdFontMono-Regular.otf-3e136b3157bfe9949f8ac12bd0f829b6.fontdata"]
+source_file="res://puppy/res/fonts/DepartureMonoNerdFontMono-Regular.otf"
+dest_files=["res://.godot/imported/DepartureMonoNerdFontMono-Regular.otf-f3a4728d43f6ec8409c309035e9671e7.fontdata"]
 
 [params]
 

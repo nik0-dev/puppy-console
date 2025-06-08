@@ -1,4 +1,4 @@
-@icon("res://puppy/res/console_settings.svg")
+@icon("res://puppy/res/icons/console_settings.svg")
 class_name ConsoleSettings extends Resource
 
 @export_group("General")
@@ -6,8 +6,9 @@ class_name ConsoleSettings extends Resource
 ## the rate at which the internal "monitors" update.
 ## not to be confused with monitor display refresh rates.
 ## (default rate is 60hz)
+@export var TITLE : String = "PuppyConsoleGD"
 @export_range(0.1, 5.0) var MONITOR_UPDATE_RATE : float = 0.167
-@export var FONT : Font = preload("res://puppy/res/DepartureMonoNerdFontMono-Regular.otf")
+@export var FONT : Font = preload("res://puppy/res/fonts/DepartureMonoNerdFontMono-Regular.otf")
 @export var FONT_SIZE : int = 11
 	
 @export_group("Shortcuts")
@@ -49,6 +50,13 @@ class_name ConsoleSettings extends Resource
 
 @export_group("Styling")
 
+@export_subgroup("General")
+@export var MARGIN_TOP : int = 10
+@export var MARGIN_RIGHT : int = 10
+@export var MARGIN_BOTTOM : int = 10
+@export var MARGIN_LEFT : int = 10
+@export var VBOX_SEPARATION : int = 0
+
 @export_subgroup("Title")
 @export var TITLE_STYLE : StyleBox = preload("res://puppy/res/styles/title.tres")
 
@@ -61,8 +69,15 @@ class_name ConsoleSettings extends Resource
 @export var INPUT_STYLE_NORMAL : StyleBox = preload("res://puppy/res/styles/input.tres")
 @export var INPUT_STYLE_READ_ONLY : StyleBox = preload("res://puppy/res/styles/input_read_only.tres")
 
+
 @export_subgroup("Status")
 @export var STATUS_STYLE : StyleBox = preload("res://puppy/res/styles/status.tres")
 
 @export_subgroup("Backing")
 @export var BACKING_STYLE : StyleBox = preload("res://puppy/res/styles/backing.tres")
+
+@export_subgroup("Workspace - Command Line")
+@export_multiline var CLI_INPUT_HINT : String = "Type 'commands' to see all available commands."
+
+@export_subgroup("Workspace - Monitors")
+@export_multiline var MONITOR_INPUT_HINT : String = "Input not allowed in this workspace."
