@@ -54,8 +54,6 @@ func _ready():
 	_monitor_timer.start(SETTINGS.MONITOR_UPDATE_RATE)
 	_monitor_timer.timeout.connect(_monitor_tick)
 	
-	monitors["randf"] = create_progress_bar_monitor.bind(func(): return randf(), 30)
-	
 func _monitor_tick():
 	if monitors_visible:
 		cls()
