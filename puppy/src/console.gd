@@ -65,6 +65,59 @@ func _monitor_tick():
 
 func _input(event: InputEvent) -> void:
 	if !event.is_echo() && event.is_pressed():
+		if interface.output.has_focus():
+			if event.is_match(Console.SETTINGS.SELECT_ALL_OUTPUT_EVENT):
+				interface.output.select_all()
+			if event.is_match(Console.SETTINGS.COPY_OUTPUT_EVENT):
+				DisplayServer.clipboard_set(interface.output.get_selected_text())
+		if interface.input.has_focus():
+			if event.is_match(Console.SETTINGS.CLEAR_INPUT_EVENT):
+				interface.clear_input()
+			if event.is_match(Console.SETTINGS.SELECT_ALL_INPUT_EVENT):
+				interface.input.select()
+			if event.is_match(Console.SETTINGS.COPY_INPUT_EVENT):
+				if interface.input.has_selection():
+					DisplayServer.clipboard_set(interface.input.get_selected_text())
+			if event.is_match(Console.SETTINGS.PASTE_INPUT_EVENT):
+				if interface.input.has_selection():
+					var from = interface.input.get_selection_from_column()
+					var to = interface.input.get_selection_to_column()
+					interface.input.delete_text(from, to)
+					interface.input.deselect()
+				interface.input.insert_text_at_caret(DisplayServer.clipboard_get())
+			if event.is_match(Console.SETTINGS.NEXT_WORD_EVENT) || event.is_match(Console.SETTINGS.DELETE_NEXT_WORD_EVENT):
+				var from : int = interface.input.caret_column
+				if !interface.input.text.is_empty():
+					if interface.input.caret_column != interface.input.text.length():
+						var initial_lookahead = interface.input.text[interface.input.caret_column]
+						var initial_pos = interface.input.caret_column 
+				
+						for i in range(initial_pos, interface.input.text.length()):
+							if initial_lookahead == " ":
+								if interface.input.text[interface.input.caret_column] != " ": break
+							if initial_lookahead != " ":
+								if interface.input.text[interface.input.caret_column] == " ": break
+							interface.input.caret_column += 1
+				var to : int = interface.input.caret_column
+				if event.is_match(Console.SETTINGS.DELETE_NEXT_WORD_EVENT): 
+					interface.input.delete_text(min(from,to), max(from,to))
+							
+			if event.is_match(Console.SETTINGS.PREV_WORD_EVENT) || event.is_match(Console.SETTINGS.DELETE_LAST_WORD_EVENT):
+				var from : int = interface.input.caret_column
+				if !interface.input.text.is_empty():
+					if interface.input.caret_column != 0:
+						var initial_lookbehind = interface.input.text[interface.input.caret_column - 1]
+						var initial_pos = interface.input.caret_column 
+				
+						for i in range(initial_pos, -1, -1):
+							if initial_lookbehind == " ":
+								if interface.input.text[interface.input.caret_column - 1] != " ": break
+							if initial_lookbehind != " ":
+								if interface.input.text[interface.input.caret_column - 1] == " ": break
+							interface.input.caret_column -= 1
+				var to : int = interface.input.caret_column
+				if event.is_match(Console.SETTINGS.DELETE_LAST_WORD_EVENT): 
+					interface.input.delete_text(min(from,to), max(from,to))
 		if event.is_match(SETTINGS.HISTORY_NEXT_EVENT):
 			pass
 		if event.is_match(SETTINGS.HISTORY_PREV_EVENT):
@@ -113,7 +166,6 @@ func _input(event: InputEvent) -> void:
 			var size = DisplayServer.window_get_size()
 			interface.handle.size = Vector2(size.x/2, size.y/2) 
 			interface.handle.position = Vector2(size.x/2, size.y/2)
-			
 		if event.is_match(SETTINGS.DOCK_FULL):
 			interface.handle.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 			
