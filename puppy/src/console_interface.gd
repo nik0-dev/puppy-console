@@ -9,30 +9,21 @@ var output := RichTextLabel.new()
 var status := Label.new()
 var input := LineEdit.new()
 
-var title_style := StyleBoxFlat.new()
-var output_style := StyleBoxFlat.new()
-var status_style := StyleBoxFlat.new()
-var input_style := StyleBoxFlat.new()
-var backing_style := StyleBoxFlat.new()
-
 var font : Font: set = set_font
 var font_size : int: set = set_font_size
 
-var opacity : float: set = set_opacity
-
 const _DEFAULT_VBOX_SEPARATION : int = 0
 const _DEFAULT_TITLE : String = "Developer Console"
+const _DEFAULT_INPUT_PLACEHOLDER_TEXT : String = "Type 'commands' to see all available commands."
+const _DEFAULT_BORDER_VALUE : int = 1
+const _DEFAULT_STATUS_FORMATTER = "Working Node: %s | Workspace: %s"
+const _DEFAULT_MARGIN_VALUE : int = 10 
 const _DEFAULT_CONTAINER_MARGINS : Dictionary[String, int] = {
 	"margin_left": _DEFAULT_MARGIN_VALUE,
 	"margin_right": _DEFAULT_MARGIN_VALUE,
 	"margin_top": _DEFAULT_MARGIN_VALUE,
 	"margin_bottom": _DEFAULT_MARGIN_VALUE
 } 
-const _DEFAULT_MARGIN_VALUE : int = 10 
-const _DEFAULT_INPUT_PLACEHOLDER_TEXT : String = "Type 'commands' to see all available commands."
-const _DEFAULT_FONT : Font = preload("res://puppy/res/DepartureMonoNerdFontMono-Regular.otf")
-const _DEFAULT_FONT_SIZE : int = 11
-const _DEFAULT_BORDER_VALUE : int = 1
 
 func _init():
 	_init_handle()
@@ -44,9 +35,8 @@ func _init():
 	_init_status()
 	_init_input()
 	
-	set_font(_DEFAULT_FONT)
-	set_font_size(_DEFAULT_FONT_SIZE)
-	set_status("Working Node: N/A | Monitors")
+	set_font(Console.SETTINGS.FONT)
+	set_font_size(Console.SETTINGS.FONT_SIZE)
 	
 func _init_handle():
 	add_child(handle)
@@ -60,7 +50,7 @@ func _init_margins():
 func _init_backing():
 	margins.add_child(backing)
 	backing.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_init_backing_style()
+	backing.add_theme_stylebox_override("panel", Console.SETTINGS.BACKING_STYLE)
 
 func _init_vbox():
 	margins.add_child(vbox)
@@ -71,7 +61,7 @@ func _init_title():
 	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	set_title(_DEFAULT_TITLE)
-	_init_title_style()
+	title.add_theme_stylebox_override("normal", Console.SETTINGS.TITLE_STYLE)
 
 func _init_output():
 	vbox.add_child(output)
@@ -79,11 +69,12 @@ func _init_output():
 	output.selection_enabled = true
 	output.bbcode_enabled = true
 	output.shortcut_keys_enabled = false
-	_init_output_style()
+	output.add_theme_stylebox_override("focus", Console.SETTINGS.OUTPUT_STYLE_FOCUS)
+	output.add_theme_stylebox_override("normal", Console.SETTINGS.OUTPUT_STYLE_NORMAL)
 
 func _init_status():
 	vbox.add_child(status)
-	_init_status_style()
+	status.add_theme_stylebox_override("normal", Console.SETTINGS.STATUS_STYLE)
 	
 func _init_input():
 	vbox.add_child(input)
@@ -92,38 +83,9 @@ func _init_input():
 	input.placeholder_text = _DEFAULT_INPUT_PLACEHOLDER_TEXT
 	input.shortcut_keys_enabled = false
 	input.context_menu_enabled = false
-	_init_input_style()
-
-func _init_backing_style():
-	backing_style.bg_color = Color.CADET_BLUE
-	backing_style.set_expand_margin_all(_DEFAULT_BORDER_VALUE)
-	backing.add_theme_stylebox_override("panel", backing_style)
-
-func _init_title_style():
-	title_style.bg_color = Color.DARK_BLUE
-	title.add_theme_stylebox_override("normal", title_style)
-
-func _init_output_style():
-	output_style.bg_color = Color.BLACK
-	output_style.set_content_margin_all(_DEFAULT_MARGIN_VALUE)
-	output.add_theme_stylebox_override("normal", output_style)
-	output.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
-
-func _init_status_style():
-	status_style.bg_color = Color.DARK_BLUE
-	status_style.content_margin_left = _DEFAULT_MARGIN_VALUE
-	status.add_theme_stylebox_override("normal", status_style)
-
-func _init_input_style():
-	input_style.bg_color = Color.BLACK
-	input_style.content_margin_left = _DEFAULT_MARGIN_VALUE
-	var disabled_style : StyleBoxFlat = input_style.duplicate()
-	disabled_style.bg_color.a = 0.2
-	input.add_theme_stylebox_override("normal", input_style)
-	input.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
-	input.add_theme_stylebox_override("read_only", disabled_style)
-
-
+	input.add_theme_stylebox_override("focus", Console.SETTINGS.INPUT_STYLE_FOCUS)
+	input.add_theme_stylebox_override("normal", Console.SETTINGS.INPUT_STYLE_NORMAL)
+	
 func set_status(text: String): status.text = text
 func set_title(text: String): title.text = text
 
@@ -148,18 +110,6 @@ func set_font_size(new_font_size: int):
 	status.add_theme_font_size_override("font_size", new_font_size)
 	input.add_theme_font_size_override("font_size", new_font_size)
 	font_size = new_font_size
-	
-func set_bg(color: Color):
-	output_style.bg_color = Color(color, 1.0)
-	output.add_theme_stylebox_override("normal", output_style)
-	
-func set_fg(color: Color):
-	output.add_theme_color_override("default_color", Color(color, 1.0))
-
-func set_opacity(value: float):
-	output_style.bg_color.a = value
-	output.add_theme_stylebox_override("normal", output_style)
-	opacity = value
 
 func write(text: String): output.text += text
 func write_line(text: String): output.text += text + "\n"

@@ -7,7 +7,9 @@ class_name ConsoleSettings extends Resource
 ## not to be confused with monitor display refresh rates.
 ## (default rate is 60hz)
 @export_range(0.1, 5.0) var MONITOR_UPDATE_RATE : float = 0.167
-
+@export var FONT : Font = preload("res://puppy/res/DepartureMonoNerdFontMono-Regular.otf")
+@export var FONT_SIZE : int = 11
+	
 @export_group("Shortcuts")
 
 @export_subgroup("General")
@@ -28,8 +30,6 @@ class_name ConsoleSettings extends Resource
 @export var DOCK_BOTTOM : InputEvent
 @export var DOCK_BOTTOM_RIGHT : InputEvent
 
-
-
 @export_subgroup("Input")
 @export var SELECT_ALL_INPUT_EVENT : InputEvent
 @export var CLEAR_INPUT_EVENT : InputEvent
@@ -46,3 +46,23 @@ class_name ConsoleSettings extends Resource
 @export var SELECT_ALL_OUTPUT_EVENT : InputEvent
 @export var CLEAR_OUTPUT_EVENT : InputEvent
 @export var COPY_OUTPUT_EVENT : InputEvent
+
+@export_group("Styling")
+
+@export_subgroup("Title")
+@export var TITLE_STYLE : StyleBox = preload("res://puppy/res/styles/title.tres")
+
+@export_subgroup("Output")
+@export var OUTPUT_STYLE_FOCUS : StyleBox = preload("res://puppy/res/styles/empty.tres")
+@export var OUTPUT_STYLE_NORMAL : StyleBox = preload("res://puppy/res/styles/output.tres")
+
+@export_subgroup("Input")
+@export var INPUT_STYLE_FOCUS : StyleBox = preload("res://puppy/res/styles/empty.tres")
+@export var INPUT_STYLE_NORMAL : StyleBox = preload("res://puppy/res/styles/input.tres")
+@export var INPUT_STYLE_READ_ONLY : StyleBox = preload("res://puppy/res/styles/input_read_only.tres")
+
+@export_subgroup("Status")
+@export var STATUS_STYLE : StyleBox = preload("res://puppy/res/styles/status.tres")
+
+@export_subgroup("Backing")
+@export var BACKING_STYLE : StyleBox = preload("res://puppy/res/styles/backing.tres")
